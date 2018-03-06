@@ -14384,40 +14384,56 @@ var powerbi;
                         options.element.appendChild(this.divMap);
                         var L = typeof L !== 'undefined' ? L : window['L'];
                         this.map = L.map('map');
-                        this.map.setView([-41.28, 174.77], 11);
-                        var mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-                        this.layer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; ' + mapLink + ' Contributors', maxZoom: 18, });
+                        this.map.setView([30, -90], 4);
+                        this.layer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+                        ;
+                        this.map.addLayer(this.layer);
+                        this.layer = L.tileLayer.wms('https://ahocevar.com/geoserver/wms', {
+                            layers: 'topp:states',
+                            transparent: true,
+                            opacity: 0.1,
+                            format: 'image/png'
+                        });
                         this.map.addLayer(this.layer);
                     }
                     Visual.prototype.update = function (options) {
                         //update map size
-                        this.divMap.style.height = options.viewport.height.toString() + "px";
-                        this.divMap.style.width = options.viewport.width.toString() + "px";
-                        var svg = d3.select("#map").select("svg"), g = svg.append("g");
-                        var data = [
-                            { lat: -41.28, lng: 174.77, latlng: {}, status: ['Under', 'Over', 'Normal'], itemCnt: [30, 40, 50] },
-                            { lat: -41.29, lng: 174.76, latlng: {}, status: ['Under', 'Over', 'Normal'], itemCnt: [30, 30, 60] },
-                            { lat: -41.23, lng: 174.79, latlng: {}, status: ['Under', 'Over', 'Normal'], itemCnt: [30, 70, 10] }
-                        ];
-                        data.forEach(function (d) {
-                            d.latlng = new L.LatLng(d.lat, d.lng);
-                        });
-                        var circle = g.selectAll("circle")
-                            .data(data)
-                            .enter().append("circle")
-                            .style("stroke", "black")
-                            .style("opacity", .6)
-                            .style("fill", "red")
-                            .attr("r", 20);
-                        this.map.on("viewreset", update);
-                        update();
-                        function update() {
-                            circle.attr("transform", function (d) {
-                                return "translate(" +
-                                    this.map.latLngToLayerPoint(new L.LatLng(d.lat, d.lng)).x + "," +
-                                    this.map.latLngToLayerPoint(new L.LatLng(d.lat, d.lng)).y + ")";
-                            });
-                        }
+                        /* this.divMap.style.height = options.viewport.height.toString() + "px";
+                         this.divMap.style.width = options.viewport.width.toString() + "px";
+                         
+                         var svg = d3.select("#map").select("svg"),
+                         g = svg.append("g");
+                         
+                         var data: Data[] = [
+                             {lat:-41.28, lng:174.77, latlng:{}, status:['Under','Over','Normal'], itemCnt: [30,40,50]},
+                             {lat:-41.29, lng:174.76, latlng:{}, status:['Under','Over','Normal'], itemCnt: [30,30,60]},
+                             {lat:-41.23, lng:174.79, latlng:{}, status:['Under','Over','Normal'], itemCnt: [30,70,10]}
+                         ];
+             
+                         data.forEach(function(d) {
+                             d.latlng = new L.LatLng(<number>d.lat, <number>d.lng);
+                         })
+                         
+                         var circle= g.selectAll("circle")
+                             .data(data)
+                             .enter().append("circle")
+                             .style("stroke", "black")
+                             .style("opacity", .6)
+                             .style("fill", "red")
+                             .attr("r", 20)
+                             
+                         this.map.on("viewreset", update);
+                         update();
+             
+                         function update() {
+                             circle.attr("transform",
+                             function(d)  {
+                                     return "translate("+
+                                     this.map.latLngToLayerPoint(new L.LatLng(d.lat, d.lng)).x +","+
+                                     this.map.latLngToLayerPoint(new L.LatLng(d.lat, d.lng)).y +")";
+                                     }
+                             )
+                         }*/
                     };
                     return Visual;
                 }());

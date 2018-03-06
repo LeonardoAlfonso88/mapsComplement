@@ -28,15 +28,24 @@ module powerbi.extensibility.visual.mapsComplementC3061B8C85C14FAB9DEBD860486559
             var L = typeof L !== 'undefined' ? L : window['L'];
             
             this.map = L.map('map');
-            this.map.setView([-41.28,174.77], 11); 
-            var mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-            this.layer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; ' + mapLink + ' Contributors', maxZoom: 18, });
+            this.map.setView([30, -90], 4); 
+            
+            this.layer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'); ;
             this.map.addLayer(this.layer);
+
+            this.layer = L.tileLayer.wms('https://ahocevar.com/geoserver/wms', { 
+                    layers: 'topp:states', 
+                    transparent: true, 
+                    opacity: 0.1,
+                    format: 'image/png' 
+                });
+            this.map.addLayer(this.layer);
+
         }
 
         public update(options: VisualUpdateOptions) {
             //update map size
-            this.divMap.style.height = options.viewport.height.toString() + "px";
+           /* this.divMap.style.height = options.viewport.height.toString() + "px";
             this.divMap.style.width = options.viewport.width.toString() + "px";
             
             var svg = d3.select("#map").select("svg"),
@@ -71,7 +80,7 @@ module powerbi.extensibility.visual.mapsComplementC3061B8C85C14FAB9DEBD860486559
                         this.map.latLngToLayerPoint(new L.LatLng(d.lat, d.lng)).y +")";
                         }
                 )
-            }
+            }*/
         }
     }
 }
